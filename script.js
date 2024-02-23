@@ -7,5 +7,6 @@ function story(text) {
 function submit() {
     story(input.value);
     input.value = ''
+    console.log('a')
 }
 
