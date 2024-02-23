@@ -37,5 +37,6 @@ body {
 p {
     font-size: 15px;
     color: rgb(0, 255, 0);
-    font-family: '微軟正黑體';
+    font-family: 'Consolas';
+    line-height: 1px;
 }

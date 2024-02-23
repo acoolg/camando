@@ -10,3 +10,11 @@ function submit() {
     console.log('a')
 }
 
+story("axaxaxaxaxax")
+story("axaxaxaxaxax")
+story("axaxaxaxaxax")
+story("axaxaxaxaxax")
+story("我xaxaxaxaxax")
+
+
+
