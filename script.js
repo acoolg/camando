@@ -1,6 +1,7 @@
 var console = document.getElementById('contole');
 var input = document.getElementById('input-field')
-
+var health = 200
+var inbattle = false
 function story(text) {
     console.innerHTML += `<p>` + text + `</p>`
 }
@@ -20,6 +21,11 @@ document.addEventListener('keydown', function (e) {
 function clearConsole() {
     console.innerHTML = '';
 }
+
+function printstats() {
+    story(`health: ${health}`)
+}
+
 function chapter1() {
     console.innerHTML += `
 <pre>
@@ -34,7 +40,10 @@ function chapter1() {
                            ██                                      
                           ▄████▄                                    
 </pre>`
-    story("Chapter 1")
+    story("戰鬥開始了")
+    
 }
+
+
 
 chapter1()
