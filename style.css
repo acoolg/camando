@@ -40,3 +40,10 @@ p {
     font-family: 'Consolas';
     line-height: 1px;
 }
+pre{
+  font-size: 15px;
+  color: rgb(0, 255, 0);
+  font-family: 'Consolas';
+  line-height: 1px;
+  line-height: 20px;
+}
