@@ -1,20 +1,22 @@
-var console = document.getElementById('contole');
+var consoleText = document.getElementById('contole');
 var input = document.getElementById('input-field')
 var health = 200
 var inbattle = true
+var sayque = new Array()
+const startString = ">"
 
 var command = [
     {
         name: "/status",
         description: "Prints the status of the game",
-        action: function () {
+        action: function() {
             printstats()
         },
     },
     {
         name: "/attack",
         description: "Attacks the enimy",
-        action: function () {
+        action: function() {
             attack()
         },
     }
@@ -29,7 +31,7 @@ function runcommandmain() {
 }
 
 function story(text) {
-    console.innerHTML += `<p>` + text + `</p>`
+    sayque.push(text)
 }
 
 function submit() {
@@ -40,7 +42,7 @@ function submit() {
     input.focus();
 }
 
-document.addEventListener('keydown', function (e) {
+document.addEventListener('keydown', function(e) {
     if (e.key === "e") {
         submit();
     }
@@ -55,8 +57,18 @@ function printstats() {
 }
 
 
+setInterval(function() {
+    if (sayque.length == 0) {
+        console.log("nothing")
+    } else {
+        consoleText.innerHTML += `<p>${startString + sayque[0]}</p>`
+        sayque.shift()
+    }
+
+}, 1000)
+
 function chapter1() {
-    console.innerHTML += `
+    consoleText.innerHTML += `
 <pre>
 
 
@@ -85,12 +97,14 @@ function chapter1() {
                                            
 
 </pre>`
-    story("戰鬥開始了")
-    
+    story("在一個村莊裡")
+    story("有人說過")
+    story("溫室裡的花朵終究無法成長")
+  
 }
 
-setInterval(function () {
+setInterval(function() {
     let ninput = input.value + '';
-},1)
+}, 1)
 
 chapter1()
