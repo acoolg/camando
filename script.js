@@ -4,6 +4,7 @@ var health = 200
 var inbattle = true
 var sayque = new Array()
 const startString = ">"
+var speechDelay = 500
 // var everyCommandList = everyCommandList()
 
 var command = [
@@ -87,27 +88,35 @@ setInterval(function() {
         sayque.shift()
     }
 
-}, 1000)
+}, speechDelay)
 
-function chapter1() {
+function startMenu() {
     consoleText.innerHTML += `
 <pre>
-
-
  ██████╗ ██████╗ ███╗   ███╗███╗   ███╗ █████╗ ███╗   ██╗██████╗  ██████╗ 
 ██╔════╝██╔═══██╗████╗ ████║████╗ ████║██╔══██╗████╗  ██║██╔══██╗██╔═══██╗
 ██║     ██║   ██║██╔████╔██║██╔████╔██║███████║██╔██╗ ██║██║  ██║██║   ██║
 ██║     ██║   ██║██║╚██╔╝██║██║╚██╔╝██║██╔══██║██║╚██╗██║██║  ██║██║   ██║
 ╚██████╗╚██████╔╝██║ ╚═╝ ██║██║ ╚═╝ ██║██║  ██║██║ ╚████║██████╔╝╚██████╔╝
  ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═════╝  ╚═════╝ 
-                                                                                                                      
+</pre>
+    `
+    instantSayc("開始新遊戲(1)")
+    instantSayc("選擇章節(2)")
+    instantSayc("製作人員列表(3)")
+    instantSayc("抖內(4)")
+}
+
+function chapter1() {
+    consoleText.innerHTML += `
+<pre>
         ▄▄                                                         
        ███                           ██                            
         ██                           ██                       ▄▄▄  
  ▄██▀██ ███████▄  ▄█▀██▄ ▀████████▄██████  ▄▄█▀██▀███▄███    ▀███  
 ██▀  ██ ██    ██ ██   ██   ██   ▀██  ██   ▄█▀   ██ ██▀ ▀▀      ██  
 ██      ██    ██  ▄█████   ██    ██  ██   ██▀▀▀▀▀▀ ██          ██  
-██▄    ▄██    ██ ██   ██   ██   ▄██  ██   ██▄    ▄ ██          ██  
+██▄    ▄██    ██ ██   ██   ██   ▄██  ██   ██▄    ▄ ██          ██
  █████▀████  ████▄████▀██▄ ██████▀   ▀████ ▀█████▀████▄      ▄████▄
                            ██                                      
                          ▄████▄                                    
@@ -117,12 +126,26 @@ function chapter1() {
     story("在一個村莊裡")
     story("有人說過")
     story("溫室裡的花朵終究無法成長")
-    story("")
+    story("一位少年以此為戒")
+    story("他發誓他要贏果所有人")
+    story("冒險")
+    story("就此展開")
 
 }
 
-setInterval(function() {
-    let ninput = input.value + '';
-}, 1)
+function instantSay(text) {
+    consoleText.innerHTML += `<p>${text}</p>`
+}
 
-chapter1()
+function instantSayc(text) {
+    consoleText.innerHTML += `<p class="center">${text}</p>`
+}
+
+function clearConsole() {
+    consoleText.innerHTML = ""
+}
+
+window.onload = function() {
+    input.focus
+    startMenu()
+}
