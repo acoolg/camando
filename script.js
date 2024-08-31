@@ -13,6 +13,7 @@ var array = []
 var command = [
     {
         name: "status",
+        syntax:"/status",
         description: "Prints the status of the game",
         action: function(input1, input2, input3) {
             printstats()
@@ -20,15 +21,24 @@ var command = [
     },
     {
         name: "attack",
+        syntax:"/attack",
         description: "Attacks the enimy",
         action: function(input1, input2, input3) {
             attack()
         },
     }, {
         name: "note",
+        syntax:"/note {note sentence: text} {color: text}",
         description: "add note on screen",
         action: function(input1, input2, input3) {
             consoleText.innerHTML += `<p style="color:${input2};">${input1}</p>`
+        },
+    }, {
+        name: "log",
+        syntax:"/log {things to log: text}",
+        description: "console log",
+        action: function(input1, input2, input3) {
+            console.log(input1);
         },
     }
 ]
@@ -101,6 +111,7 @@ function handleChapter(imput) {
             chapter1()
             inChapterMenu = false
             break;
+
         default:
             clearConsole()
             chapterMenu()
@@ -180,6 +191,7 @@ setInterval(function() {
 }, speechDelay)
 
 function startMenu() {
+    clearConsole()
     consoleText.innerHTML += `
 <pre>
  ██████╗ ██████╗ ███╗   ███╗███╗   ███╗ █████╗ ███╗   ██╗██████╗  ██████╗ 
@@ -198,6 +210,7 @@ function startMenu() {
 }
 
 function chapterMenu() {
+    clearConsole()
     consoleText.innerHTML += `
 <pre>
   ▄████▄   ██░ ██  ▒█████   ▒█████    ██████  ▓█████    
@@ -257,7 +270,7 @@ function clearConsole() {
 }
 
 window.onload = function() {
-    document.getElementById('input-field').focus()
+    // document.getElementById('input-field').focus()
     startMenu()
 }
 
@@ -267,3 +280,22 @@ input.addEventListener("keypress", function (event) {
         submit()
     }
 });
+
+setInterval((e) => {
+    var inputValue = input.value
+    var data = inputValue.slice(1)
+    var dataComponents = data.split(" ")
+    var commandType = dataComponents[0]
+    var thereIsAWord = false
+    console.log(dataComponents);
+    thereIsAWord = false
+    everyCommandList.forEach(commandWord => {
+        if(commandWord == commandType){
+            thereIsAWord = true
+            document.getElementById("stntax").innerHTML = command[everyCommandList.indexOf(commandWord)].syntax
+        }
+    })
+    if(!thereIsAWord){
+        document.getElementById("stntax").innerHTML = ""
+    }
+}, 50);
