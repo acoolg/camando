@@ -6,46 +6,63 @@ var sayque = new Array()
 const startString = ">"
 var speechDelay = 800
 var inStarterMenu = false
-var cantype = true
+var canType = true
 var inChapterMenu = false
-// var everyCommandList = everyCommandList()
+var array = []
 
 var command = [
     {
-        name: "/status",
+        name: "status",
         description: "Prints the status of the game",
         action: function(input1, input2, input3) {
             printstats()
         },
     },
     {
-        name: "/attack",
+        name: "attack",
         description: "Attacks the enimy",
         action: function(input1, input2, input3) {
             attack()
         },
     }, {
-        name: "/say",
-        description: "Attacks the enimy",
+        name: "note",
+        description: "add note on screen",
         action: function(input1, input2, input3) {
-            story("rr")
+            consoleText.innerHTML += `<p style="color:${input2};">${input1}</p>`
         },
     }
 ]
 
-// function everyCommandList() {
-//     var result = []
-//     console.log(command)
-//     command.forEach(e => {
-//         result.push(e.name)
-//     })
-//     console.log(result)
-//     return result
-// }
+var everyCommandList = everyCommandList()
+
+function everyCommandList() {
+    var result = []
+    console.log(command)
+    command.forEach(e => {
+        result.push(e.name)
+    })
+    console.log(result)
+    return result
+}
 
 
-function runcommandmain(imput) {
+function runcommandmain(input) {
+    var data = input.slice(1)
+    var dataComponents = data.split(" ")
+    var commandType = dataComponents[0]
+
+    console.log(dataComponents);
+
+    everyCommandList.forEach(commandWord => {
+        if(commandWord == commandType){
+            console.log(command[everyCommandList.indexOf(commandWord)]);
+            
+            command[everyCommandList.indexOf(commandWord)].action(dataComponents[1], dataComponents[2], dataComponents[3])
+            return ""
+        }
+    })
     
+
 }
 
 function credit() {
@@ -55,7 +72,7 @@ function credit() {
     ]
     var times = 0
     var intervalId = setInterval(() => {
-        cantype = false
+        canType = false
         // 当遍历完数组后，停止计时器并调用 startMenu
         if (times >= contribut.length) {
             clearInterval(intervalId);
@@ -82,11 +99,12 @@ function handleChapter(imput) {
         case "1":
             clearConsole()
             chapter1()
+            inChapterMenu = false
             break;
         default:
             clearConsole()
             chapterMenu()
-            instantSay(">`不是符合規則的回答")
+            instantSay(">不是符合規則的回答")
             break;
     }
 }
@@ -109,7 +127,7 @@ function handleMenu(ans) {
         default:
             clearConsole()
             startMenu()
-            instantSay(">`不是符合規則的回答")
+            instantSay(">不是符合規則的回答")
             break
     }
 }
@@ -119,9 +137,8 @@ function story(text) {
 }
 
 function submit() {
-    if(cantype){
+    if(canType){
         let inputValue = input.value + '';
-        instantSay("#" + input.value);
         input.value = '';
         input.focus();
         if(inStarterMenu){
@@ -129,18 +146,17 @@ function submit() {
             return ""
         } else if (inChapterMenu) {
             handleChapter(inputValue)
+            return ""
         }
         if(inputValue.startsWith("/")) {
-        runcommandmain(inputValue)
+            instantSay(inputValue);
+            runcommandmain(inputValue)
+            
+        } else{
+            instantSay("#" + input.value);
         }
     }
 }
-
-document.addEventListener('keydown', function(e) {
-    if (e.key === "e") {
-        submit();
-    }
-});
 
 function clearConsole() {
     console.innerHTML = '';
@@ -154,11 +170,11 @@ function printstats() {
 setInterval(function() {
     if (sayque.length == 0) {
         console.log("nothing")
-        cantype = true;
+        canType = true;
     } else {
         consoleText.innerHTML += `<p>${startString + sayque[0]}</p>`
         sayque.shift()
-        cantype = false;
+        canType = false;
     }
 
 }, speechDelay)
@@ -174,10 +190,10 @@ function startMenu() {
  ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═════╝  ╚═════╝ 
 </pre>
     `
-    instantSayCenter("開始新遊戲(1)")// start game
-    instantSayCenter("選擇章節(2)") // choose chapter
-    instantSayCenter("製作人員列表(3)")//auther list
-    instantSayCenter("抖內(4)")// buy us coffie
+    instantSayAtCenter("開始新遊戲(1)")// start game
+    instantSayAtCenter("選擇章節(2)") // choose chapter
+    instantSayAtCenter("製作人員列表(3)")//auther list
+    instantSayAtCenter("抖內(4)")// buy us coffie
     inStarterMenu = true
 }
 
@@ -195,11 +211,11 @@ function chapterMenu() {
  ░ ░       ░  ░  ░    ░ ░      ░ ░        ░  ░   ░      
 </pre>
     `
-    instantSayCenter("進入第一章(1)") // chapter 1
-    instantSayCenter("進入第二章(2)") // chapter 2
-    instantSayCenter("進入第三章(3)") // chapter 3
-    instantSayCenter("進入第四章(4)") // chapter 4
-    instantSayCenter("返回主選單(5)") // back to menu
+    instantSayAtCenter("進入第一章(1)") // chapter 1
+    instantSayAtCenter("進入第二章(2)") // chapter 2
+    instantSayAtCenter("進入第三章(3)") // chapter 3
+    instantSayAtCenter("進入第四章(4)") // chapter 4
+    instantSayAtCenter("返回主選單(5)") // back to menu
     inChapterMenu = true
 }
 
@@ -232,7 +248,7 @@ function instantSay(text) {
     consoleText.innerHTML += `<p>${text}</p>`
 }
 
-function instantSayCenter(text) {
+function instantSayAtCenter(text) {
     consoleText.innerHTML += `<p class="center">${text}</p>`
 }
 
@@ -241,7 +257,7 @@ function clearConsole() {
 }
 
 window.onload = function() {
-    input.focus
+    document.getElementById('input-field').focus()
     startMenu()
 }
 
