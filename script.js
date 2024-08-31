@@ -41,25 +41,17 @@ var command = [
             console.log(input1);
         },
     }, {
-        name: "nite",
-        syntax:"/nite test",
-        description: "add note on screen",
+        name: "help",
+        syntax:"/help",
+        description: "Prints all commands",
         action: function(input1, input2, input3) {
-            consoleText.innerHTML += `<p style="color:${input2};">${input1}</p>`
-        },
-    }, {
-        name: "nita",
-        syntax:"/nita test",
-        description: "add note on screen",
-        action: function(input1, input2, input3) {
-            consoleText.innerHTML += `<p style="color:${input2};">${input1}</p>`
-        },
-    }, {
-        name: "nte",
-        syntax:"/nte test",
-        description: "add note on screen",
-        action: function(input1, input2, input3) {
-            consoleText.innerHTML += `<p style="color:${input2};">${input1}</p>`
+            instantSay(" ")
+            command.forEach(e => {
+                instantSay(`${e.name}`)
+                instantSay("|    簡介:" + e.description)
+                instantSay("|    語法:" + e.syntax)
+                instantSay("&nbsp;")
+            })
         },
     }
 ]
@@ -299,7 +291,7 @@ function clearConsole() {
 }
 
 window.onload = function() {
-    // document.getElementById('input-field').focus()
+    document.getElementById('input-field').focus()
     startMenu()
 }
 
