@@ -77,3 +77,10 @@ pre{
     position: fixed;
     bottom: 20px;
 }
+.syntax p{
+    color: aquamarine;
+    background: #262626;
+    line-height: 20px;
+    height: 20px;
+    margin: 0px;
+}
