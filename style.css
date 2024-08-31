@@ -52,14 +52,14 @@ p {
     font-family: 'Consolas';
     line-height: 10px;
 }
+
 pre{
     font-family: 'Consolas';
     text-align: center;
     font-size: 15px;
     color: rgb(0, 255, 0);
-    line-height: 16px;
+    line-height: 19px;
 }
-
 
 .center{
     text-align: center;

@@ -13,20 +13,20 @@ var command = [
     {
         name: "/status",
         description: "Prints the status of the game",
-        action: function() {
+        action: function(input1, input2, input3) {
             printstats()
         },
     },
     {
         name: "/attack",
         description: "Attacks the enimy",
-        action: function() {
+        action: function(input1, input2, input3) {
             attack()
         },
     }, {
         name: "/say",
         description: "Attacks the enimy",
-        action: function() {
+        action: function(input1, input2, input3) {
             story("rr")
         },
     }
@@ -34,9 +34,11 @@ var command = [
 
 // function everyCommandList() {
 //     var result = []
+//     console.log(command)
 //     command.forEach(e => {
 //         result.push(e.name)
 //     })
+//     console.log(result)
 //     return result
 // }
 
@@ -48,15 +50,11 @@ function runcommandmain(imput) {
 function credit() {
     var contribut = [
         "acoolg",
-        "slime",
-        "christian",
-        "matthew",
-        "joseph",
-        "michael",
         ""
     ]
     var times = 0
     var intervalId = setInterval(() => {
+        cantype = false
         // 当遍历完数组后，停止计时器并调用 startMenu
         if (times >= contribut.length) {
             clearInterval(intervalId);
@@ -88,6 +86,11 @@ function handleMenu(ans) {
         case "3":
             clearConsole()
             credit()
+            break
+        default:
+            clearConsole()
+            startMenu()
+            instantSay(">`不是符合規則的回答")
             break
     }
 }
@@ -159,17 +162,17 @@ function startMenu() {
 function chapter1() {
     consoleText.innerHTML += `
 <pre>
-        ▄▄                                                         
-       ███                           ██                            
-        ██                           ██                       ▄▄▄  
- ▄██▀██ ███████▄  ▄█▀██▄ ▀████████▄██████  ▄▄█▀██▀███▄███    ▀███  
-██▀  ██ ██    ██ ██   ██   ██   ▀██  ██   ▄█▀   ██ ██▀ ▀▀      ██  
-██      ██    ██  ▄█████   ██    ██  ██   ██▀▀▀▀▀▀ ██          ██  
-██▄    ▄██    ██ ██   ██   ██   ▄██  ██   ██▄    ▄ ██          ██  
- █████▀████  ████▄████▀██▄ ██████▀   ▀████ ▀█████▀████▄      ▄████▄
-                           ██                                      
-                         ▄████▄                                    
-
+         ▄▄                                                              
+        ███                              ██                              
+         ██                              ██                         ▄▄▄  
+ ▄██▀██  ███████▄   ▄█▀██▄  ▀████████▄ ██████   ▄▄█▀██ ▀███▄███    ▀███  
+██▀  ██  ██    ██  ██   ██    ██   ▀██   ██    ▄█▀   ██  ██▀ ▀▀      ██  
+██       ██    ██   ▄█████    ██    ██   ██    ██▀▀▀▀▀▀  ██          ██  
+██▄     ▄██    ██  ██   ██    ██   ▄██   ██    ██▄    ▄  ██          ██  
+ █████▀ ████  ████ ▄████▀██▄  ██████▀    ▀████  ▀█████▀ ████▄      ▄████▄
+                              ██                                         
+                            ▄████▄                                       
+  
 </pre>`
     story("在一個村莊裡")
     story("有人說過")
