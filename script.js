@@ -40,6 +40,27 @@ var command = [
         action: function(input1, input2, input3) {
             console.log(input1);
         },
+    }, {
+        name: "nite",
+        syntax:"/nite test",
+        description: "add note on screen",
+        action: function(input1, input2, input3) {
+            consoleText.innerHTML += `<p style="color:${input2};">${input1}</p>`
+        },
+    }, {
+        name: "nita",
+        syntax:"/nita test",
+        description: "add note on screen",
+        action: function(input1, input2, input3) {
+            consoleText.innerHTML += `<p style="color:${input2};">${input1}</p>`
+        },
+    }, {
+        name: "nte",
+        syntax:"/nte test",
+        description: "add note on screen",
+        action: function(input1, input2, input3) {
+            consoleText.innerHTML += `<p style="color:${input2};">${input1}</p>`
+        },
     }
 ]
 
@@ -111,7 +132,10 @@ function handleChapter(imput) {
             chapter1()
             inChapterMenu = false
             break;
-
+        case "5":
+            clearConsole()
+            startMenu()
+            break
         default:
             clearConsole()
             chapterMenu()
@@ -134,6 +158,11 @@ function handleMenu(ans) {
         case "3":
             clearConsole()
             credit()
+            break
+        case "4":
+            clearConsole()
+            startMenu()
+            instantSay(">尚未開放")
             break
         default:
             clearConsole()
@@ -287,14 +316,10 @@ setInterval((e) => {
     var dataComponents = data.split(" ")
     var commandType = dataComponents[0]
     var thereIsAWord = false
-    thereIsAWord = false
+    document.getElementById("stntax").innerHTML = ""
     everyCommandList.forEach(commandWord => {
-        if(commandWord == commandType){
-            thereIsAWord = true
-            document.getElementById("stntax").innerHTML = command[everyCommandList.indexOf(commandWord)].syntax
+        if(commandWord.startsWith(commandType) && data != ""){
+            document.getElementById("stntax").innerHTML += `<p>${command[everyCommandList.indexOf(commandWord)].syntax}</p>`
         }
     })
-    if(!thereIsAWord){
-        document.getElementById("stntax").innerHTML = ""
-    }
-}, 50);
+}, 100);
