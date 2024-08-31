@@ -7,6 +7,7 @@ const startString = ">"
 var speechDelay = 800
 var inStarterMenu = false
 var cantype = true
+var inChapterMenu = false
 // var everyCommandList = everyCommandList()
 
 var command = [
@@ -76,12 +77,30 @@ function check(text) {
     }
 }
 
+function handleChapter(imput) {
+    switch (imput) {
+        case "1":
+            clearConsole()
+            chapter1()
+            break;
+        default:
+            clearConsole()
+            chapterMenu()
+            instantSay(">`不是符合規則的回答")
+            break;
+    }
+}
+
 function handleMenu(ans) {
     inStarterMenu = false
     switch(ans){
         case "1":
             clearConsole()
             chapter1()
+            break
+        case "2":
+            clearConsole()
+            chapterMenu()
             break
         case "3":
             clearConsole()
@@ -107,6 +126,9 @@ function submit() {
         input.focus();
         if(inStarterMenu){
             handleMenu(inputValue)
+            return ""
+        } else if (inChapterMenu) {
+            handleChapter(inputValue)
         }
         if(inputValue.startsWith("/")) {
         runcommandmain(inputValue)
@@ -157,6 +179,28 @@ function startMenu() {
     instantSayCenter("製作人員列表(3)")//auther list
     instantSayCenter("抖內(4)")// buy us coffie
     inStarterMenu = true
+}
+
+function chapterMenu() {
+    consoleText.innerHTML += `
+<pre>
+  ▄████▄   ██░ ██  ▒█████   ▒█████    ██████  ▓█████    
+ ▒██▀ ▀█ ▒▓██░ ██ ▒██▒  ██▒▒██▒  ██▒▒██    ▒  ▓█   ▀    
+ ▒▓█    ▄░▒██▀▀██ ▒██░  ██▒▒██░  ██▒░ ▓██▄    ▒███      
+▒▒▓▓▄ ▄██ ░▓█ ░██ ▒██   ██░▒██   ██░  ▒   ██▒ ▒▓█  ▄    
+░▒ ▓███▀  ░▓█▒░██▓░ ████▓▒░░ ████▓▒░▒██████▒▒▒░▒████    
+░░ ░▒ ▒    ▒ ░░▒░▒░ ▒░▒░▒░ ░ ▒░▒░▒░ ▒ ▒▓▒ ▒ ░░░░ ▒░     
+   ░  ▒    ▒ ░▒░ ░  ░ ▒ ▒░   ░ ▒ ▒░ ░ ░▒  ░ ░░ ░ ░      
+ ░         ░  ░░ ░░ ░ ░ ▒  ░ ░ ░ ▒  ░  ░  ░      ░      
+ ░ ░       ░  ░  ░    ░ ░      ░ ░        ░  ░   ░      
+</pre>
+    `
+    instantSayCenter("進入第一章(1)") // chapter 1
+    instantSayCenter("進入第二章(2)") // chapter 2
+    instantSayCenter("進入第三章(3)") // chapter 3
+    instantSayCenter("進入第四章(4)") // chapter 4
+    instantSayCenter("返回主選單(5)") // back to menu
+    inChapterMenu = true
 }
 
 function chapter1() {
