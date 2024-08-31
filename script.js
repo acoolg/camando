@@ -287,7 +287,6 @@ setInterval((e) => {
     var dataComponents = data.split(" ")
     var commandType = dataComponents[0]
     var thereIsAWord = false
-    console.log(dataComponents);
     thereIsAWord = false
     everyCommandList.forEach(commandWord => {
         if(commandWord == commandType){
