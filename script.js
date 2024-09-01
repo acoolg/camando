@@ -9,56 +9,62 @@ var inStarterMenu = false
 var canType = true
 var inChapterMenu = false
 var array = []
+var lang = {}
+var command = []
+var everyCommandList = undefined
+var username = ""
 
-var command = [
-    {
-        name: "status",
-        syntax:"/status",
-        description: "Prints the status of the game",
-        action: function(input1, input2, input3) {
-            printstats()
-        },
-    },
-    {
-        name: "attack",
-        syntax:"/attack",
-        description: "Attacks the enimy",
-        action: function(input1, input2, input3) {
-            attack()
-        },
-    }, {
-        name: "note",
-        syntax:"/note {note sentence: text} {color: text}",
-        description: "add note on screen",
-        action: function(input1, input2, input3) {
-            consoleText.innerHTML += `<p style="color:${input2};">${input1}</p>`
-        },
-    }, {
-        name: "log",
-        syntax:"/log {things to log: text}",
-        description: "console log",
-        action: function(input1, input2, input3) {
-            console.log(input1);
-        },
-    }, {
-        name: "help",
-        syntax:"/help",
-        description: "Prints all commands",
-        action: function(input1, input2, input3) {
-            instantSay(" ")
-            command.forEach(e => {
-                instantSay(`${e.name}`)
-                instantSay("|    簡介:" + e.description)
-                instantSay("|    語法:" + e.syntax)
-                instantSay("&nbsp;")
-            })
-        },
-    }
-]
+fetch("lang/cn-tw.json")
+    .then(async (data) => {
+        lang = await data.json()
+        console.log(lang)
+        setupCommand(lang)
+        console.log(command)
+        everyCommandList = listEveryCommandList()
+})
 
-var everyCommandList = everyCommandList()
+function setupCommand(lang) {
+    command = [
+        {
+            name: "status",
+            syntax: lang.command.syntax.status,
+            description: lang.command.description.status,
+            action: function(input1, input2, input3) {
+                printstats()
+            },
+        },
+        {
+            name: "attack",
+            syntax:lang.command.syntax.attack,
+            description: lang.command.description.attack,
+            action: function(input1, input2, input3) {
+                attack()
+            },
+        }, {
+            name: "note",
+            syntax:lang.command.syntax.note,
+            description: lang.command.description.note,
+            action: function(input1, input2, input3) {
+                consoleText.innerHTML += `<p style="color:${input2};">${input1}</p>`
+            },
+        }, {
+            name: "help",
+            syntax:lang.command.syntax.help,
+            description: lang.command.description.help,
+            action: function(input1, input2, input3) {
+                instantSay(" ")
+                command.forEach(e => {
+                    instantSay(`${e.name}`)
+                    instantSay(lang.command.others.description + e.description)
+                    instantSay(lang.command.others.syntax + e.syntax)
+                    instantSay("&nbsp;")
+                })
+            },
+        }
+    ]
+}
 
-function everyCommandList() {
+function listEveryCommandList() {
     var result = []
     console.log(command)
     command.forEach(e => {
@@ -127,11 +133,12 @@ function handleChapter(imput) {
         case "5":
             clearConsole()
             startMenu()
+            inChapterMenu = fals
             break
         default:
             clearConsole()
             chapterMenu()
-            instantSay(">不是符合規則的回答")
+            instantSay(lang.menu.invalid_syntax)
             break;
     }
 }
@@ -154,12 +161,12 @@ function handleMenu(ans) {
         case "4":
             clearConsole()
             startMenu()
-            instantSay(">尚未開放")
+            instantSay(lang.menu.not_yet)
             break
         default:
             clearConsole()
             startMenu()
-            instantSay(">不是符合規則的回答")
+            instantSay(lang.menu.invalid_syntax)
             break
     }
 }
@@ -226,7 +233,7 @@ function startMenu() {
     instantSayAtCenter("開始新遊戲(1)")// start game
     instantSayAtCenter("選擇章節(2)") // choose chapter
     instantSayAtCenter("製作人員列表(3)")//auther list
-    instantSayAtCenter("抖內(4)")// buy us coffie
+    instantSayAtCenter("抖內(4)")// buy us coffee
     inStarterMenu = true
 }
 
@@ -291,7 +298,20 @@ function clearConsole() {
 }
 
 window.onload = function() {
-    document.getElementById('input-field').focus()
+    setInterval((e) => {
+        var inputValue = input.value
+        var data = inputValue.slice(1)
+        var dataComponents = data.split(" ")
+        var commandType = dataComponents[0]
+        var thereIsAWord = false
+        document.getElementById("stntax").innerHTML = ""
+        everyCommandList.forEach(commandWord => {
+            if(commandWord.startsWith(commandType) && data != ""){
+                document.getElementById("stntax").innerHTML += `<p>${command[everyCommandList.indexOf(commandWord)].syntax}</p>`
+            }
+        })
+    }, 100);
+    // document.getElementById('input-field').focus()
     startMenu()
 }
 
@@ -302,16 +322,11 @@ input.addEventListener("keypress", function (event) {
     }
 });
 
-setInterval((e) => {
-    var inputValue = input.value
-    var data = inputValue.slice(1)
-    var dataComponents = data.split(" ")
-    var commandType = dataComponents[0]
-    var thereIsAWord = false
-    document.getElementById("stntax").innerHTML = ""
-    everyCommandList.forEach(commandWord => {
-        if(commandWord.startsWith(commandType) && data != ""){
-            document.getElementById("stntax").innerHTML += `<p>${command[everyCommandList.indexOf(commandWord)].syntax}</p>`
-        }
-    })
-}, 100);
+
+
+function replacePlaceholders(str) {
+    return str.replace(/{(\w+)}/g, (match, p1) => {
+        // 使用 eval() 來動態地解析變數名稱
+        return eval(p1);
+    });
+}
