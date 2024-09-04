@@ -1,67 +1,77 @@
+import * as lang from "./system/lang.js"
+import {chapter1} from "./system/chapter/1.js"
+
 var consoleText = document.getElementById('contole');
 var input = document.getElementById('input-field')
-var health = 200
-var inbattle = true
+
+var inbattle = false
+
 var sayque = new Array()
 const startString = ">"
 var speechDelay = 800
+
 var inStarterMenu = false
 var canType = true
 var inChapterMenu = false
-var array = []
-var lang = {}
+var inLangMenu = false
+
+var language = {}
 var command = []
+
+var playerStatus = {
+    health: 100,
+    level: 1,
+    exp: 0,
+    maxExp: 100,
+    inventory: []
+}
+
 var everyCommandList = undefined
 var username = ""
+init(lang.zh_tw)
 
-fetch("lang/cn-tw.json")
-    .then(async (data) => {
-        lang = await data.json()
-        console.log(lang)
-        setupCommand(lang)
-        console.log(command)
-        everyCommandList = listEveryCommandList()
-})
+function init(languages) {
+    language = languages
 
-function setupCommand(lang) {
     command = [
         {
             name: "status",
-            syntax: lang.command.syntax.status,
-            description: lang.command.description.status,
-            action: function(input1, input2, input3) {
+            syntax: language.command.syntax.status,
+            description: language.command.description.status,
+            action: function (inputValue) {
                 printstats()
             },
         },
         {
             name: "attack",
-            syntax:lang.command.syntax.attack,
-            description: lang.command.description.attack,
-            action: function(input1, input2, input3) {
+            syntax: language.command.syntax.attack,
+            description: language.command.description.attack,
+            action: function (inputValue) {
                 attack()
             },
         }, {
             name: "note",
-            syntax:lang.command.syntax.note,
-            description: lang.command.description.note,
-            action: function(input1, input2, input3) {
-                consoleText.innerHTML += `<p style="color:${input2};">${input1}</p>`
+            syntax: language.command.syntax.note,
+            description: language.command.description.note,
+            action: function (inputValue) {
+                consoleText.innerHTML += `<p style="color:${inputValue[1]};font-size:${inputValue[2]}px;">${inputValue[0]}</p>`
             },
         }, {
             name: "help",
-            syntax:lang.command.syntax.help,
-            description: lang.command.description.help,
-            action: function(input1, input2, input3) {
+            syntax: language.command.syntax.help,
+            description: language.command.description.help,
+            action: function (inputValue) {
                 instantSay(" ")
                 command.forEach(e => {
                     instantSay(`${e.name}`)
-                    instantSay(lang.command.others.description + e.description)
-                    instantSay(lang.command.others.syntax + e.syntax)
+                    instantSay(language.command.others.description + e.description)
+                    instantSay(language.command.others.syntax + e.syntax)
                     instantSay("&nbsp;")
                 })
             },
         }
     ]
+    everyCommandList = listEveryCommandList()
 }
 
 function listEveryCommandList() {
@@ -86,7 +96,7 @@ function runcommandmain(input) {
         if(commandWord == commandType){
             console.log(command[everyCommandList.indexOf(commandWord)]);
             
-            command[everyCommandList.indexOf(commandWord)].action(dataComponents[1], dataComponents[2], dataComponents[3])
+            command[everyCommandList.indexOf(commandWord)].action(dataComponents.slice(1))
             return ""
         }
     })
@@ -133,45 +143,17 @@ function handleChapter(imput) {
         case "5":
             clearConsole()
             startMenu()
-            inChapterMenu = fals
+            inChapterMenu = false
             break
         default:
             clearConsole()
             chapterMenu()
-            instantSay(lang.menu.invalid_syntax)
+            instantSay(language.menu.invalid_syntax)
             break;
     }
 }
 
-function handleMenu(ans) {
-    inStarterMenu = false
-    switch(ans){
-        case "1":
-            clearConsole()
-            chapter1()
-            break
-        case "2":
-            clearConsole()
-            chapterMenu()
-            break
-        case "3":
-            clearConsole()
-            credit()
-            break
-        case "4":
-            clearConsole()
-            startMenu()
-            instantSay(lang.menu.not_yet)
-            break
-        default:
-            clearConsole()
-            startMenu()
-            instantSay(lang.menu.invalid_syntax)
-            break
-    }
-}
-
-function story(text) {
+export function story(text) {
     sayque.push(text)
 }
 
@@ -186,19 +168,20 @@ function submit() {
         } else if (inChapterMenu) {
             handleChapter(inputValue)
             return ""
+        } else if(inLangMenu){
+            handleLang(inputValue)
+            return ""
         }
         if(inputValue.startsWith("/")) {
             instantSay(inputValue);
             runcommandmain(inputValue)
             
-        } else{
-            instantSay("#" + input.value);
         }
     }
 }
 
-function clearConsole() {
-    console.innerHTML = '';
+export function clearConsole() {
+    consoleText.innerHTML = '';
 }
 
 function printstats() {
@@ -230,10 +213,10 @@ function startMenu() {
  ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═════╝  ╚═════╝ 
 </pre>
     `
-    instantSayAtCenter("開始新遊戲(1)")// start game
-    instantSayAtCenter("選擇章節(2)") // choose chapter
-    instantSayAtCenter("製作人員列表(3)")//auther list
-    instantSayAtCenter("抖內(4)")// buy us coffee
+    instantSayAtCenter(language.menu.start.new_game)// start game
+    instantSayAtCenter(language.menu.start.choose_chapter) // choose chapter
+    instantSayAtCenter(language.menu.start.author_list)//auther list
+    instantSayAtCenter(language.menu.start.buy_coffee)// buy us coffee
     inStarterMenu = true
 }
 
@@ -252,49 +235,52 @@ function chapterMenu() {
  ░ ░       ░  ░  ░    ░ ░      ░ ░        ░  ░   ░      
 </pre>
     `
-    instantSayAtCenter("進入第一章(1)") // chapter 1
-    instantSayAtCenter("進入第二章(2)") // chapter 2
-    instantSayAtCenter("進入第三章(3)") // chapter 3
-    instantSayAtCenter("進入第四章(4)") // chapter 4
-    instantSayAtCenter("返回主選單(5)") // back to menu
+    instantSayAtCenter(language.menu.chapter_choose[1]) // chapter 1
+    instantSayAtCenter(language.menu.chapter_choose[2]) // chapter 2
+    instantSayAtCenter(language.menu.chapter_choose[3]) // chapter 3
+    instantSayAtCenter(language.menu.chapter_choose[4]) // chapter 4
+    instantSayAtCenter(language.menu.chapter_choose.back) // back to menu
     inChapterMenu = true
 }
 
-function chapter1() {
-    consoleText.innerHTML += `
-<pre>
-         ▄▄                                                              
-        ███                              ██                              
-         ██                              ██                         ▄▄▄  
- ▄██▀██  ███████▄   ▄█▀██▄  ▀████████▄ ██████   ▄▄█▀██ ▀███▄███    ▀███  
-██▀  ██  ██    ██  ██   ██    ██   ▀██   ██    ▄█▀   ██  ██▀ ▀▀      ██  
-██       ██    ██   ▄█████    ██    ██   ██    ██▀▀▀▀▀▀  ██          ██  
-██▄     ▄██    ██  ██   ██    ██   ▄██   ██    ██▄    ▄  ██          ██  
- █████▀ ████  ████ ▄████▀██▄  ██████▀    ▀████  ▀█████▀ ████▄      ▄████▄
-                              ██                                         
-                            ▄████▄                                       
-  
-</pre>`
-    story("在一個村莊裡")
-    story("有人說過")
-    story("溫室裡的花朵終究無法成長")
-    story("一位少年以此為戒")
-    story("他發誓他要贏果所有人")
-    story("冒險")
-    story("就此展開")
+// main menu
 
+function handleMenu(ans) {
+    inStarterMenu = false
+    switch(ans){
+        case "1":
+            clearConsole()
+            chapter1()
+            break
+        case "2":
+            clearConsole()
+            chapterMenu()
+            break
+        case "3":
+            clearConsole()
+            credit()
+            break
+        case "4":
+            clearConsole()
+            startMenu()
+            instantSay(language.menu.not_yet)
+            break
+        default:
+            clearConsole()
+            startMenu()
+            instantSay(language.menu.invalid_syntax)
+            break
+    }
 }
 
-function instantSay(text) {
+// main menu end
+
+export function instantSay(text) {
     consoleText.innerHTML += `<p>${text}</p>`
 }
 
-function instantSayAtCenter(text) {
+export function instantSayAtCenter(text) {
     consoleText.innerHTML += `<p class="center">${text}</p>`
-}
-
-function clearConsole() {
-    consoleText.innerHTML = ""
 }
 
 window.onload = function() {
@@ -312,7 +298,7 @@ window.onload = function() {
         })
     }, 100);
     // document.getElementById('input-field').focus()
-    startMenu()
+    languagesMenu()
 }
 
 input.addEventListener("keypress", function (event) {
@@ -322,11 +308,45 @@ input.addEventListener("keypress", function (event) {
     }
 });
 
+function languagesMenu(){
+    consoleText.innerHTML = `<pre>
+  ██▓    ▄▄▄      ███▄    █  ▄████  █    ██  ▄▄▄      ▄████  ▓█████
+ ▓██▒   ▒████▄    ██ ▀█   █  ██▒ ▀█ ██  ▓██▒▒████▄    ██▒ ▀█ ▓█   ▀
+ ▒██░   ▒██  ▀█▄ ▓██  ▀█ ██▒▒██░▄▄▄▓██  ▒██░▒██  ▀█▄ ▒██░▄▄▄ ▒███  
+ ▒██░   ░██▄▄▄▄██▓██▒  ▐▌██▒░▓█  ██▓▓█  ░██░░██▄▄▄▄██░▓█  ██ ▒▓█  ▄
+▒░██████▒▓█   ▓██▒██░   ▓██░▒▓███▀▒▒▒█████▓ ▒▓█   ▓██▒▓███▀▒▒░▒████
+░░ ▒░▓  ░▒▒   ▓▒█░ ▒░   ▒ ▒ ░▒   ▒ ░▒▓▒ ▒ ▒ ░▒▒   ▓▒█░▒   ▒ ░░░ ▒░ 
+░░ ░ ▒  ░ ░   ▒▒ ░ ░░   ░ ▒░ ░   ░ ░░▒░ ░ ░ ░ ░   ▒▒  ░   ░ ░ ░ ░  
+   ░ ░    ░   ▒     ░   ░ ░  ░   ░  ░░░ ░ ░   ░   ▒   ░   ░     ░  
+░    ░        ░           ░      ░    ░           ░       ░ ░   ░  
+    </pre>`
+    instantSayAtCenter("English(1)")
+    instantSayAtCenter("繁體中文(2)")
+    inLangMenu = true
+}
 
+async function handleLang(input){
+    switch(input){
+        case "1":
+            init(lang.en_us)
+            break
+        case "2":
+            init(lang.zh_tw)
+            break
+        default:
+            instantSay(language.menu.invalid_syntax)
+            break
+    }
+    inLangMenu = false
+    setTimeout(function(){
+        startMenu()
+    }, 10)
+}
 
 function replacePlaceholders(str) {
     return str.replace(/{(\w+)}/g, (match, p1) => {
         // 使用 eval() 來動態地解析變數名稱
         return eval(p1);
+        
     });
 }

@@ -1,3 +1,13 @@
+@font-face {
+    font-family: 'Consolas';
+    src: url(CONSOLA.ttf);
+}
+
+@font-face {
+    font-family: 'Consolas';
+    src: url(CONSOLA.ttf);
+    font-weight: bold;
+}
 
 body {
     position: relative;
