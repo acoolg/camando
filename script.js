@@ -3,6 +3,7 @@ import {chapter1} from "./system/chapter/1.js"
 
 var consoleText = document.getElementById('contole');
 var input = document.getElementById('input-field')
+var submitBtn = document.getElementById('submit-button')
 
 var inbattle = false
 
@@ -350,3 +351,7 @@ function replacePlaceholders(str) {
         
     });
 }
+
+submitBtn.addEventListener('click', () => {
+    submit()
+})
