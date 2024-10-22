@@ -1,5 +1,5 @@
-import * as lang from "./system/lang.js"
-import {chapter1} from "./system/chapter/1.js"
+import * as lang from "./system/lang_out.js"
+import { chapter1 } from "./system/chapter/1.js"
 
 var consoleText = document.getElementById('contole');
 var input = document.getElementById('input-field')

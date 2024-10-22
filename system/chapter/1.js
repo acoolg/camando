@@ -1,7 +1,5 @@
-import * as main from "../../script.js"
-
-export function chapter1() {
-    consoleText.innerHTML += `
+const chapter1 = function(element, lang) {
+    element.tinnerHTML += `
 <pre>
          ▄▄                                                              
         ███                              ██                              
@@ -15,12 +13,16 @@ export function chapter1() {
                             ▄████▄                                       
   
 </pre>`
-    main.story(language.chapter_1.text[1])
-    main.story(language.chapter_1.text[2])
-    main.story(language.chapter_1.text[3])
-    main.story(language.chapter_1.text[4])
-    main.story(language.chapter_1.text[5])
-    main.story(language.chapter_1.text[6])
-    main.story(language.chapter_1.text[7])
-
+    say(lang.chapter_1.text[1])
+    say(lang.chapter_1.text[2])
+    say(lang.chapter_1.text[3])
+    say(lang.chapter_1.text[4])
+    say(lang.chapter_1.text[5])
+    say(lang.chapter_1.text[6])
+    say(lang.chapter_1.text[7])
+    function say(text){
+        element.innerHTML += `<p>${text}</p>`;
+    }
 }
+
+export {chapter1}
