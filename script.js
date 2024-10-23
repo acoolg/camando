@@ -39,7 +39,7 @@ init(lang.zh_tw)
 function init(languages) {
     language = languages
 
-    command = commandSetUp(languages)
+    command = commandSetUp(languages, consoleText)
     
     everyCommandList = listEveryCommandList()
 }

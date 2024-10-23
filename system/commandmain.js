@@ -1,4 +1,4 @@
-export function commandSetUp(lang) {
+export function commandSetUp(lang, output) {
     // comand is not a miss spell, it's because there is a variable called command
     return [
         {
@@ -21,7 +21,7 @@ export function commandSetUp(lang) {
             syntax: lang.command.syntax.note,
             description: lang.command.description.note,
             action: function (inputValue) {
-                consoleText.innerHTML += `<p style="color:${inputValue[1]};font-size:${inputValue[2]}px;">${inputValue[0]}</p>`
+                output.innerHTML += `<p style="color:${inputValue[1]};font-size:${inputValue[2]}px;">${inputValue[0]}</p>`
             },
         }, {
             name: "help",
