@@ -1,4 +1,4 @@
-const chapter1 = function(element, lang) {
+const chapter1 = function(element, lang, ary) {
     element.tinnerHTML += `
 <pre>
          ▄▄                                                              
@@ -21,8 +21,10 @@ const chapter1 = function(element, lang) {
     say(lang.chapter_1.text[6])
     say(lang.chapter_1.text[7])
     function say(text){
-        element.innerHTML += `<p>${text}</p>`;
+        ary.push(text)
+        // element.innerHTML += `<p>${text}</p>`;
     }
+    
 }
 
 export {chapter1}

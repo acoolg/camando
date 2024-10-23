@@ -251,7 +251,7 @@ function handleMenu(ans) {
     switch(ans){
         case "1":
             clearConsole()
-            chapter1()
+            chapter1(consoleText, language, sayque)
             break
         case "2":
             clearConsole()
