@@ -4,7 +4,7 @@
   "description": "[english version readme](markdownDocs/en_readme.md)",
   "main": "script.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npx serve"
   },
   "keywords": [],
   "author": "",
