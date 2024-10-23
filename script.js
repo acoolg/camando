@@ -1,5 +1,4 @@
-import figlet from "figlet";
-import standard from "figlet/importable-fonts/Standard.js";
+// import figlet from 'https://esm.sh/figlet';
 import * as lang from "./system/lang_out.js"
 import { chapter1 } from "./system/chapter/1.js"
 import { commandSetUp } from "./system/commandmain.js";
@@ -342,13 +341,3 @@ function menuToHtml(menua) {
         
     })
 }
-
-console.log(figlet.text("command", "Bubble", function (err, text) {
-    if (err) {
-        console.log("something went wrong...");
-        console.dir(err);
-        return;
-    }
-    console.log(text);
-}));
-
