@@ -1,9 +1,10 @@
 import * as lang from "./system/lang_out.js"
 import { chapter1 } from "./system/chapter/1.js"
+import { commandSetUp } from "./system/commandmain.js";
 
-var consoleText = document.getElementById('contole');
-var input = document.getElementById('input-field')
-var submitBtn = document.getElementById('submit-button')
+const consoleText = document.getElementById('contole');
+const input = document.getElementById('input-field')
+const submitBtn = document.getElementById('submit-button')
 
 var inbattle = false
 
@@ -27,6 +28,8 @@ var playerStatus = {
     inventory: []
 }
 
+var ableMove = undefined
+
 var everyCommandList = undefined
 var username = ""
 init(lang.zh_tw)
@@ -34,44 +37,8 @@ init(lang.zh_tw)
 function init(languages) {
     language = languages
 
-    command = [
-        {
-            name: "status",
-            syntax: language.command.syntax.status,
-            description: language.command.description.status,
-            action: function (inputValue) {
-                printstats()
-            },
-        },
-        {
-            name: "attack",
-            syntax: language.command.syntax.attack,
-            description: language.command.description.attack,
-            action: function (inputValue) {
-                attack()
-            },
-        }, {
-            name: "note",
-            syntax: language.command.syntax.note,
-            description: language.command.description.note,
-            action: function (inputValue) {
-                consoleText.innerHTML += `<p style="color:${inputValue[1]};font-size:${inputValue[2]}px;">${inputValue[0]}</p>`
-            },
-        }, {
-            name: "help",
-            syntax: language.command.syntax.help,
-            description: language.command.description.help,
-            action: function (inputValue) {
-                instantSay(" ")
-                command.forEach(e => {
-                    instantSay(`${e.name}`)
-                    instantSay(language.command.others.description + e.description)
-                    instantSay(language.command.others.syntax + e.syntax)
-                    instantSay("&nbsp;")
-                })
-            },
-        }
-    ]
+    command = commandSetUp(languages)
+    
     everyCommandList = listEveryCommandList()
 }
 
@@ -355,3 +322,20 @@ function replacePlaceholders(str) {
 submitBtn.addEventListener('click', () => {
     submit()
 })
+
+const menu = [
+    {
+        label: "Start",
+        action: startMenu
+    },
+    {
+        label: "Chapter 1",
+        action: chapter1
+    }
+]
+
+function menuToHtml(menua) {
+    menu.forEach((item, index, array) => {
+        
+    })
+}
