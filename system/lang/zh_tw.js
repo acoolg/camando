@@ -23,17 +23,17 @@ var zh_tw = {
         invalid_syntax: ">不是符合規則的回答",
         not_yet: ">尚未開放",
         start: {
-            new_game: "開始新遊戲(1)",
-            choose_chapter: "選擇章節(2)",
-            author_list: "製作人員列表(3)",
-            buy_coffee: "抖內(4)"
+            new_game: "開始新遊戲",
+            choose_chapter: "選擇章節",
+            author_list: "製作人員列表",
+            buy_coffee: "抖內"
         },
         chapter_choose: {
-            1: "進入第一章(1)",
-            2: "進入第二章(2)",
-            3: "進入第三章(3)",
-            4: "進入第四章(4)",
-            back: "返回主選單(5)"
+            1: "進入第一章",
+            2: "進入第二章",
+            3: "進入第三章",
+            4: "進入第四章",
+            back: "返回主選單"
         },
         profile: {
             choose_username: "選擇用戶名",

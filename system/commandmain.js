@@ -1,5 +1,4 @@
 export function commandSetUp(lang, output) {
-    // comand is not a miss spell, it's because there is a variable called command
     return [
         {
             name: "status",

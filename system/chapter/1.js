@@ -1,5 +1,5 @@
-const chapter1 = function(element, lang, ary) {
-    element.tinnerHTML += `
+function chapter1(element, lang, ary) {
+    element.innerHTML += `
 <pre>
          ▄▄                                                              
         ███                              ██                              

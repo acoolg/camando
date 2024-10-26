@@ -1,8 +1,9 @@
-// import figlet from 'https://esm.sh/figlet';
+// import figlet from "figlet";
 import * as lang from "./system/lang_out.js"
 import { chapter1 } from "./system/chapter/1.js"
 import { commandSetUp } from "./system/commandmain.js";
-
+import * as menu from "./system/menu/starter.js"
+// var figlet = require("figlet");
 
 const consoleText = document.getElementById('contole');
 const input = document.getElementById('input-field')
@@ -14,10 +15,13 @@ var sayque = new Array()
 const startString = ">"
 var speechDelay = 800
 
-var inStarterMenu = false
+// var inStarterMenu = false
 var canType = true
-var inChapterMenu = false
-var inLangMenu = false
+// var inChapterMenu = false
+// var inLangMenu = false
+var inMenu = null
+
+var startMenu = undefined
 
 var language = {}
 var command = []
@@ -30,18 +34,43 @@ var playerStatus = {
     inventory: []
 }
 
-var ableMove = undefined
+const func = {
+    story: story,
+    clearConsole: clearConsole,
+    menuToHtml: menuToHtml,
+    instantSay: instantSay,
+    callAChapter: callAChapter,
+    consoleText: consoleText,
+    sayque: sayque
+}
+
+var log = console.log
+
+var ableMove = new Array
+var ifNot = undefined
 
 var everyCommandList = undefined
 var username = ""
 init(lang.zh_tw)
 
+// this will do the translation
 function init(languages) {
     language = languages
 
     command = commandSetUp(languages, consoleText)
     
     everyCommandList = listEveryCommandList()
+}
+
+// this sets up the menu
+function everyMenuSetUp(lang) {
+    startMenu = menu.createStarterMenu(lang, func)
+}
+
+
+// this will call a chapter
+function callAChapter(witch){
+    eval(`chapter${witch}(consoleText, lang, sayque, func)`)
 }
 
 function listEveryCommandList() {
@@ -127,25 +156,47 @@ export function story(text) {
     sayque.push(text)
 }
 
+//                    ▄▄                          ▄▄        
+//                   ▄██                          ██   ██   
+//                    ██                               ██   
+// ▄██▀██████  ▀███   ██▄████▄ ▀████████▄█████▄ ▀███ ██████ 
+// ██   ▀▀ ██    ██   ██    ▀██  ██    ██    ██   ██   ██   
+// ▀█████▄ ██    ██   ██     ██  ██    ██    ██   ██   ██   
+// █▄   ██ ██    ██   ██▄   ▄██  ██    ██    ██   ██   ██   
+// ██████▀ ▀████▀███▄ █▀█████▀ ▄████  ████  ████▄████▄ ▀████
+//
 function submit() {
     if(canType){
         let inputValue = input.value + '';
         input.value = '';
         input.focus();
-        if(inStarterMenu){
-            handleMenu(inputValue)
-            return ""
-        } else if (inChapterMenu) {
-            handleChapter(inputValue)
-            return ""
-        } else if(inLangMenu){
-            handleLang(inputValue)
-            return ""
+        if(ableMove != []){
+            for (let i = 0; i < ableMove.length; i++) {
+                const e = ableMove[i];
+                if (e.trigger === inputValue) {
+                    e.action();
+                    ableMove = [];
+                    return;  // This exits the function
+                }
+            }
+            log("sss")
+            ableMove = []
+            inMenu[inMenu.length - 1].action()
+            return;
         }
+        // if(inStarterMenu){
+        //     handleMenu(inputValue)
+        //     return ""
+        // } else if (inChapterMenu) {
+        //     handleChapter(inputValue)
+        //     return ""
+        // } else if(inLangMenu){
+        //     handleLang(inputValue)
+        //     return ""
+        // }
         if(inputValue.startsWith("/")) {
             instantSay(inputValue);
             runcommandmain(inputValue)
-            
         }
     }
 }
@@ -171,24 +222,24 @@ setInterval(function() {
 
 }, speechDelay)
 
-function startMenu() {
-    clearConsole()
-    consoleText.innerHTML += `
-<pre>
- ██████╗ ██████╗ ███╗   ███╗███╗   ███╗ █████╗ ███╗   ██╗██████╗  ██████╗ 
-██╔════╝██╔═══██╗████╗ ████║████╗ ████║██╔══██╗████╗  ██║██╔══██╗██╔═══██╗
-██║     ██║   ██║██╔████╔██║██╔████╔██║███████║██╔██╗ ██║██║  ██║██║   ██║
-██║     ██║   ██║██║╚██╔╝██║██║╚██╔╝██║██╔══██║██║╚██╗██║██║  ██║██║   ██║
-╚██████╗╚██████╔╝██║ ╚═╝ ██║██║ ╚═╝ ██║██║  ██║██║ ╚████║██████╔╝╚██████╔╝
- ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═════╝  ╚═════╝ 
-</pre>
-    `
-    instantSayAtCenter(language.menu.start.new_game)// start game
-    instantSayAtCenter(language.menu.start.choose_chapter) // choose chapter
-    instantSayAtCenter(language.menu.start.author_list)//auther list
-    instantSayAtCenter(language.menu.start.buy_coffee)// buy us coffee
-    inStarterMenu = true
-}
+// function startMenu() {
+//     clearConsole()
+//     consoleText.innerHTML += `
+// <pre>
+//  ██████╗ ██████╗ ███╗   ███╗███╗   ███╗ █████╗ ███╗   ██╗██████╗  ██████╗ 
+// ██╔════╝██╔═══██╗████╗ ████║████╗ ████║██╔══██╗████╗  ██║██╔══██╗██╔═══██╗
+// ██║     ██║   ██║██╔████╔██║██╔████╔██║███████║██╔██╗ ██║██║  ██║██║   ██║
+// ██║     ██║   ██║██║╚██╔╝██║██║╚██╔╝██║██╔══██║██║╚██╗██║██║  ██║██║   ██║
+// ╚██████╗╚██████╔╝██║ ╚═╝ ██║██║ ╚═╝ ██║██║  ██║██║ ╚████║██████╔╝╚██████╔╝
+//  ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═════╝  ╚═════╝ 
+// </pre>
+//     `
+//     instantSayAtCenter(language.menu.start.new_game)// start game
+//     instantSayAtCenter(language.menu.start.choose_chapter) // choose chapter
+//     instantSayAtCenter(language.menu.start.author_list)//auther list
+//     instantSayAtCenter(language.menu.start.buy_coffee)// buy us coffee
+//     inStarterMenu = true
+// }
 
 function chapterMenu() {
     clearConsole()
@@ -255,20 +306,25 @@ export function instantSayAtCenter(text) {
 
 window.onload = function() {
     setInterval((e) => {
-        var inputValue = input.value
-        var data = inputValue.slice(1)
-        var dataComponents = data.split(" ")
-        var commandType = dataComponents[0]
-        var thereIsAWord = false
         document.getElementById("stntax").innerHTML = ""
-        everyCommandList.forEach(commandWord => {
-            if(commandWord.startsWith(commandType) && data != ""){
-                document.getElementById("stntax").innerHTML += `<p>${command[everyCommandList.indexOf(commandWord)].syntax}</p>`
-            }
-        })
+        var inputValue = input.value
+        if(inputValue.startsWith("/")) {
+            var data = inputValue.slice(1)
+            var dataComponents = data.split(" ")
+            var commandType = dataComponents[0]
+            var thereIsAWord = false
+            document.getElementById("stntax").innerHTML = ""
+            everyCommandList.forEach(commandWord => {
+                if(commandWord.startsWith(commandType) && data != ""){
+                    document.getElementById("stntax").innerHTML += `<p>${command[everyCommandList.indexOf(commandWord)].syntax}</p>`
+                }
+            })
+        }
     }, 100);
-    // document.getElementById('input-field').focus()
-    languagesMenu()
+    document.getElementById('input-field').focus()
+    // languagesMenu()
+    everyMenuSetUp(language)
+    menuToHtml(startMenu)
 }
 
 input.addEventListener("keypress", function (event) {
@@ -325,19 +381,65 @@ submitBtn.addEventListener('click', () => {
     submit()
 })
 
-const menu = [
-    {
-        label: "Start",
-        action: startMenu
-    },
-    {
-        label: "Chapter 1",
-        action: chapter1
-    }
-]
+// var menu = [
+//     `<pre>
+//   ██▓    ▄▄▄      ███▄    █  ▄████  █    ██  ▄▄▄      ▄████  ▓█████
+//  ▓██▒   ▒████▄    ██ ▀█   █  ██▒ ▀█ ██  ▓██▒▒████▄    ██▒ ▀█ ▓█   ▀
+//  ▒██░   ▒██  ▀█▄ ▓██  ▀█ ██▒▒██░▄▄▄▓██  ▒██░▒██  ▀█▄ ▒██░▄▄▄ ▒███  
+//  ▒██░   ░██▄▄▄▄██▓██▒  ▐▌██▒░▓█  ██▓▓█  ░██░░██▄▄▄▄██░▓█  ██ ▒▓█  ▄
+// ▒░██████▒▓█   ▓██▒██░   ▓██░▒▓███▀▒▒▒█████▓ ▒▓█   ▓██▒▓███▀▒▒░▒████
+// ░░ ▒░▓  ░▒▒   ▓▒█░ ▒░   ▒ ▒ ░▒   ▒ ░▒▓▒ ▒ ▒ ░▒▒   ▓▒█░▒   ▒ ░░░ ▒░ 
+// ░░ ░ ▒  ░ ░   ▒▒ ░ ░░   ░ ▒░ ░   ░ ░░▒░ ░ ░ ░ ░   ▒▒  ░   ░ ░ ░ ░  
+//    ░ ░    ░   ▒     ░   ░ ░  ░   ░  ░░░ ░ ░   ░   ▒   ░   ░     ░  
+// ░    ░        ░           ░      ░    ░           ░       ░ ░   ░  
+//     </pre>`,
+//     {
+//         label: language.menu.start.new_game,
+//         action: function(){
+//             clearConsole()
+//             chapter1(consoleText, language, sayque)
+//         }
+//     },
+//     {
+//         label: language.menu.start.choose_chapter,
+//         action: function(){
+//             clearConsole()
+//             chapterMenu()
+//         }
+//     },
+//     {
+//         label: language.menu.start.author_list,
+//         action: function(){
+//             clearConsole()
+//             credit()
+//         }
+//     },
+//     {
+//         label: language.menu.start.buy_coffee,
+//         action: function(){
+//             instantSay(language.menu.not_yet)
+//         }
+//     },
+//     {
+//         action: function() {
+//             clearConsole()
+//             menuToHtml(inMenu)
+//         }
+//     }
+// ]
 
-function menuToHtml(menua) {
-    menu.forEach((item, index, array) => {
-        
-    })
+function menuToHtml(menu) {
+    ableMove = []
+    inMenu = menu
+    log(menu[0])
+    consoleText.innerHTML = menu[0]
+    for(var i = 1; i < menu.length - 1; i++) {
+        instantSayAtCenter(`${menu[i].label} (${i})`)
+        ableMove.push(
+            {
+                trigger: `${i}`,
+                action: menu[i].action
+            }
+        )
+    }
 }

@@ -23,17 +23,17 @@ var en_us = {
         invalid_syntax: ">invalid answer",
         not_yet: ">not open yet",
         start: {
-            new_game: "start a new game(1)",
-            choose_chapter: "choose chapter(2)",
-            author_list: "authuor list(3)",
-            buy_coffee: "buy me a coffee(4)"
+            new_game: "start a new game",
+            choose_chapter: "choose chapter",
+            author_list: "authuor list",
+            buy_coffee: "buy me a coffee"
         },
         chapter_choose: {
-            1: "chapter one(1)",
-            2: "chapter two(2)",
-            3: "chapter three(3)",
-            4: "chapter four(4)",
-            back: "main menu(5)"
+            1: "chapter one",
+            2: "chapter two",
+            3: "chapter three",
+            4: "chapter four",
+            back: "main menu"
         },
         profile: {
             choose_username: "choose a username",
